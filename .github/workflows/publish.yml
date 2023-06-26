@@ -1,0 +1,59 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - production
+      - staging
+  pull_request:
+    branches:
+      - staging
+    types:
+      - edited
+      - opened
+      - synchronize
+
+jobs:
+  publish:
+    name: Publish to Cloudflare Pages
+    permissions:
+      contents: read
+      deployments: write
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        node-version: [18.x]
+        pnpm-version: [8.x]
+    timeout-minutes: 10
+
+    steps:
+      - uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ github.token }}
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ matrix.pnpm-version }}
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'pnpm'
+          node-version: ${{ matrix.node-version }}
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+        env:
+          NODE_ENV: production
+
+      - uses: cloudflare/pages-action@v1.5.0
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          directory: dist
+          gitHubToken: ${{ github.token }}
+          projectName: qwik-blog-test # your project name here
