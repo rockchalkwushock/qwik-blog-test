@@ -1,10 +1,11 @@
-import { component$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
+import { component$ } from '@builder.io/qwik'
+import type { DocumentHead } from '@builder.io/qwik-city'
+import { Link } from '@builder.io/qwik-city'
 
-import Counter from '~/components/starter/counter/counter';
-import Hero from '~/components/starter/hero/hero';
-import Infobox from '~/components/starter/infobox/infobox';
-import Starter from '~/components/starter/next-steps/next-steps';
+import Counter from '~/components/starter/counter/counter'
+import Hero from '~/components/starter/hero/hero'
+import Infobox from '~/components/starter/infobox/infobox'
+import Starter from '~/components/starter/next-steps/next-steps'
 
 export default component$(() => {
   return (
@@ -93,13 +94,16 @@ export default component$(() => {
                   Presentations, Podcasts, Videos, etc.
                 </a>
               </li>
+              <li>
+                <Link href="/one">Go to Page One</Link>
+              </li>
             </ul>
           </Infobox>
         </div>
       </div>
     </>
-  );
-});
+  )
+})
 
 export const head: DocumentHead = {
   title: 'Welcome to Qwik',
@@ -109,4 +113,4 @@ export const head: DocumentHead = {
       content: 'Qwik site description',
     },
   ],
-};
+}
